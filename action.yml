@@ -1,11 +1,19 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Action docker compose deploy'
+description: 'Deploy service to remote serve'
+author: 'Muhammad Azizol Aminuddin'
 inputs:
-  milliseconds: # change this
+  username:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'username for ssh'
+  host:
+    required: true
+    description: 'host for ssh'
+  privateKey:
+    required: true
+    description: 'private key for ssh'
+  sha8:
+    required: true
+    description: 'Sha8 for this commit'
 runs:
   using: 'node12'
   main: 'dist/index.js'

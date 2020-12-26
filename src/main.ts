@@ -16,7 +16,10 @@ async function run(): Promise<void> {
     core.info(`Writing docker-compose.yml.`)
     core.info(dockerComposeProd)
     await sshService.connect()
-    await sshService.putFile(`/var/docker-compose.${sha8}.yml`, `/home/gha/docker-compose.${sha8}.yml`)
+    await sshService.putFile(
+      `/var/docker-compose.${sha8}.yml`,
+      `/home/gha/docker-compose.${sha8}.yml`
+    )
   } catch (error) {
     core.setFailed(error.message)
   }

@@ -98,3 +98,5 @@ Thumbs.db
 __tests__/runner/*
 lib/**/*
 /.idea/workspace.xml
+/.idea/action-docker-compose-deploy.iml
+/dist/pagent.exe

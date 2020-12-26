@@ -20,15 +20,11 @@ export class SshService {
   }
 
   public async putFile(localFile: string, remoteFile: string) {
-    return this.ssh.putFile(  localFile, remoteFile
-    )
+    return this.ssh.putFile(localFile, remoteFile)
   }
 
   public async getFile(localFile: string, remoteFile: string) {
-    return this.ssh.getFile(
-      localFile,
-      remoteFile
-    )
+    return this.ssh.getFile(localFile, remoteFile)
   }
 
   public async execCommand(command: string, options?: SSHExecCommandOptions) {
