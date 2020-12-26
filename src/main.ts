@@ -1,16 +1,22 @@
 import * as core from '@actions/core'
-import {wait} from './wait'
+import {SshService} from './service/ssh.service'
+import * as fs from 'fs'
 
 async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
-    core.debug(`Waiting ${ms} milliseconds ...`) // debug is only output if you set the secret `ACTIONS_RUNNER_DEBUG` to true
-
+    const sshService = new SshService()
+    const sha8 = core.getInput('sha8')
+    let dockerComposeProd = fs.readFileSync(
+      `/github/workspace/docker-compose.prod`,
+      `utf8`
+    )
+    dockerComposeProd = dockerComposeProd.replace(':DOCKER_TAG', sha8)
+    fs.writeFileSync(`/var/docker-compose.${sha8}.yml`, dockerComposeProd)
     core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
-
-    core.setOutput('time', new Date().toTimeString())
+    core.info(`Writing docker-compose.yml.`)
+    core.info(dockerComposeProd)
+    await sshService.connect()
+    await sshService.putFile(`/var/docker-compose.${sha8}.yml`, `/home/gha/docker-compose.${sha8}.yml`)
   } catch (error) {
     core.setFailed(error.message)
   }
