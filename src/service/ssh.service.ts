@@ -1,14 +1,14 @@
-import {NodeSSH, SSHExecCommandOptions} from 'node-ssh'
+import {NodeSSH, SSHExecCommandOptions, SSHExecCommandResponse} from 'node-ssh'
 import * as core from '@actions/core'
 
 export class SshService {
   private ssh: NodeSSH
 
-  public constructor() {
+  constructor() {
     this.ssh = new NodeSSH()
   }
 
-  public async connect() {
+  async connect(): Promise<NodeSSH> {
     const host = core.getInput('host')
     const username = core.getInput('username')
     const privateKey = core.getInput('privateKey')
@@ -19,15 +19,18 @@ export class SshService {
     })
   }
 
-  public async putFile(localFile: string, remoteFile: string) {
+  async putFile(localFile: string, remoteFile: string): Promise<void> {
     return this.ssh.putFile(localFile, remoteFile)
   }
 
-  public async getFile(localFile: string, remoteFile: string) {
+  async getFile(localFile: string, remoteFile: string): Promise<void> {
     return this.ssh.getFile(localFile, remoteFile)
   }
 
-  public async execCommand(command: string, options?: SSHExecCommandOptions) {
+  async execCommand(
+    command: string,
+    options?: SSHExecCommandOptions
+  ): Promise<SSHExecCommandResponse> {
     return this.ssh.execCommand(command, options)
   }
 }
