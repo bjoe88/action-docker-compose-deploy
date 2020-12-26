@@ -44,18 +44,7 @@ function run() {
         try {
             const sshService = new ssh_service_1.SshService();
             const sha8 = core.getInput('sha8');
-            core.info('start');
-            fs.readdirSync(`${process.env.GITHUB_WORKSPACE}`).forEach(file => {
-                core.info('file');
-                core.info(file);
-            });
-            core.info('start2');
-            fs.readdirSync(`/home/runner/work/kodkraf.com-back-end/kodkraf.com-back-end`).forEach(file => {
-                core.info('file');
-                core.info(file);
-            });
-            core.info('end');
-            let dockerComposeProd = fs.readFileSync(`/github/workspace/docker-compose.prod`, `utf8`);
+            let dockerComposeProd = fs.readFileSync(`${process.env.GITHUB_WORKSPACE}/docker-compose.prod`, `utf8`);
             dockerComposeProd = dockerComposeProd.replace(':DOCKER_TAG', sha8);
             fs.writeFileSync(`/var/docker-compose.${sha8}.yml`, dockerComposeProd);
             core.debug(new Date().toTimeString());

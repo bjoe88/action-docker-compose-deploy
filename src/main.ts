@@ -6,21 +6,8 @@ async function run(): Promise<void> {
   try {
     const sshService = new SshService()
     const sha8 = core.getInput('sha8')
-    core.info('start')
-    fs.readdirSync(`${process.env.GITHUB_WORKSPACE}`).forEach(file => {
-      core.info('file')
-      core.info(file)
-    })
-    core.info('start2')
-    fs.readdirSync(
-      `/home/runner/work/kodkraf.com-back-end/kodkraf.com-back-end`
-    ).forEach(file => {
-      core.info('file')
-      core.info(file)
-    })
-    core.info('end')
     let dockerComposeProd = fs.readFileSync(
-      `/github/workspace/docker-compose.prod`,
+      `${process.env.GITHUB_WORKSPACE}/docker-compose.prod`,
       `utf8`
     )
     dockerComposeProd = dockerComposeProd.replace(':DOCKER_TAG', sha8)
