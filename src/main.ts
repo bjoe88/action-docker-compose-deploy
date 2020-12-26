@@ -6,6 +6,9 @@ async function run(): Promise<void> {
   try {
     const sshService = new SshService()
     const sha8 = core.getInput('sha8')
+    fs.readdirSync(`/github/workspace`).forEach(file => {
+      console.log(`asd`, file);
+    });
     let dockerComposeProd = fs.readFileSync(
       `/github/workspace/docker-compose.prod`,
       `utf8`
