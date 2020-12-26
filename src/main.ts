@@ -24,9 +24,10 @@ async function run(): Promise<void> {
     )
     core.info(`Deploy stack`)
     const repo = `${process.env.GITHUB_REPOSITORY}`.split('/').pop()
-    await sshService.execCommand(
+    const response = await sshService.execCommand(
       `docker stack deploy --compose-file /home/gha/docker-compose.${sha8}.yml ${repo}`
     )
+    core.info(JSON.stringify(response))
     await sshService.dispose()
     core.setOutput('time', new Date().toTimeString())
 
