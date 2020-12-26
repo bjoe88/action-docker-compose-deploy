@@ -7,7 +7,12 @@ async function run(): Promise<void> {
     const sshService = new SshService()
     const sha8 = core.getInput('sha8')
     core.info('start')
-    fs.readdirSync(`/github/workspace`).forEach(file => {
+    fs.readdirSync(`/home/runner/work/kodkraf.com-back-end/`).forEach(file => {
+      core.info('file')
+      core.info(file)
+    })
+    core.info('start2')
+    fs.readdirSync(`/home/runner/work/kodkraf.com-back-end/kodkraf.com-back-end`).forEach(file => {
       core.info('file')
       core.info(file)
     })
