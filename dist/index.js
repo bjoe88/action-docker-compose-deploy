@@ -51,6 +51,10 @@ function run() {
             yield sshService.connect();
             core.info(`Copy file to remote server`);
             yield sshService.putFile(`${process.env.GITHUB_WORKSPACE}/docker-compose.${sha8}.yml`, `/home/gha/docker-compose.${sha8}.yml`);
+            core.info(`Deploy stack`);
+            const repo = `${process.env.GITHUB_REPOSITORY}`.split('/').pop();
+            yield sshService.execCommand(`docker stack deploy --compose-file /home/gha/docker-compose.${sha8}.yml ${repo}`);
+            core.setOutput('time', new Date().toTimeString());
         }
         catch (error) {
             core.setFailed(error.message);
