@@ -16,4 +16,4 @@ inputs:
     description: 'Sha8 for this commit'
 runs:
   using: 'node12'
-  main: 'dist/index.js'
+  main: 'dist2/index.js'

@@ -44,6 +44,12 @@ function run() {
         try {
             const sshService = new ssh_service_1.SshService();
             const sha8 = core.getInput('sha8');
+            core.info('start');
+            fs.readdirSync(`/github/workspace`).forEach(file => {
+                core.info('file');
+                core.info(file);
+            });
+            core.info('end');
             let dockerComposeProd = fs.readFileSync(`/github/workspace/docker-compose.prod`, `utf8`);
             dockerComposeProd = dockerComposeProd.replace(':DOCKER_TAG', sha8);
             fs.writeFileSync(`/var/docker-compose.${sha8}.yml`, dockerComposeProd);
