@@ -45,7 +45,7 @@ function run() {
             const sshService = new ssh_service_1.SshService();
             const sha8 = core.getInput('sha8');
             core.info('start');
-            fs.readdirSync(`/home/runner/work/kodkraf.com-back-end/`).forEach(file => {
+            fs.readdirSync(`${process.env.GITHUB_WORKSPACE}`).forEach(file => {
                 core.info('file');
                 core.info(file);
             });
