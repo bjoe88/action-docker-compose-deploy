@@ -11,13 +11,15 @@ async function run(): Promise<void> {
       `utf8`
     )
     dockerComposeProd = dockerComposeProd.replace(':DOCKER_TAG', sha8)
-    fs.writeFileSync(`/var/docker-compose.${sha8}.yml`, dockerComposeProd)
-    core.debug(new Date().toTimeString())
     core.info(`Writing docker-compose.yml.`)
-    core.info(dockerComposeProd)
+    fs.writeFileSync(
+      `${process.env.GITHUB_WORKSPACE}/docker-compose.${sha8}.yml`,
+      dockerComposeProd
+    )
     await sshService.connect()
+    core.info(`Copy file to remote server`)
     await sshService.putFile(
-      `/var/docker-compose.${sha8}.yml`,
+      `${process.env.GITHUB_WORKSPACE}/docker-compose.${sha8}.yml`,
       `/home/gha/docker-compose.${sha8}.yml`
     )
   } catch (error) {

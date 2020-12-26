@@ -46,12 +46,11 @@ function run() {
             const sha8 = core.getInput('sha8');
             let dockerComposeProd = fs.readFileSync(`${process.env.GITHUB_WORKSPACE}/docker-compose.prod`, `utf8`);
             dockerComposeProd = dockerComposeProd.replace(':DOCKER_TAG', sha8);
-            fs.writeFileSync(`/var/docker-compose.${sha8}.yml`, dockerComposeProd);
-            core.debug(new Date().toTimeString());
             core.info(`Writing docker-compose.yml.`);
-            core.info(dockerComposeProd);
+            fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/docker-compose.${sha8}.yml`, dockerComposeProd);
             yield sshService.connect();
-            yield sshService.putFile(`/var/docker-compose.${sha8}.yml`, `/home/gha/docker-compose.${sha8}.yml`);
+            core.info(`Copy file to remote server`);
+            yield sshService.putFile(`${process.env.GITHUB_WORKSPACE}/docker-compose.${sha8}.yml`, `/home/gha/docker-compose.${sha8}.yml`);
         }
         catch (error) {
             core.setFailed(error.message);
