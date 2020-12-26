@@ -54,7 +54,9 @@ function run() {
             core.info(`Deploy stack`);
             const repo = `${process.env.GITHUB_REPOSITORY}`.split('/').pop();
             yield sshService.execCommand(`docker stack deploy --compose-file /home/gha/docker-compose.${sha8}.yml ${repo}`);
+            yield sshService.dispose();
             core.setOutput('time', new Date().toTimeString());
+            return;
         }
         catch (error) {
             core.setFailed(error.message);
@@ -132,6 +134,11 @@ class SshService {
     execCommand(command, options) {
         return __awaiter(this, void 0, void 0, function* () {
             return this.ssh.execCommand(command, options);
+        });
+    }
+    dispose() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.ssh.dispose();
         });
     }
 }

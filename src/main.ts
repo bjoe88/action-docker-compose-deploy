@@ -27,7 +27,10 @@ async function run(): Promise<void> {
     await sshService.execCommand(
       `docker stack deploy --compose-file /home/gha/docker-compose.${sha8}.yml ${repo}`
     )
+    await sshService.dispose()
     core.setOutput('time', new Date().toTimeString())
+
+    return
   } catch (error) {
     core.setFailed(error.message)
   }

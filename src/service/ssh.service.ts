@@ -33,4 +33,8 @@ export class SshService {
   ): Promise<SSHExecCommandResponse> {
     return this.ssh.execCommand(command, options)
   }
+
+  async dispose(): Promise<void> {
+    return this.ssh.dispose()
+  }
 }
