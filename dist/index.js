@@ -134,6 +134,7 @@ class SshService {
     }
     execCommand(command, options) {
         return __awaiter(this, void 0, void 0, function* () {
+            core.info(`Running ssh command:  ${command}`);
             return this.ssh.execCommand(command, options);
         });
     }

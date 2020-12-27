@@ -31,6 +31,7 @@ export class SshService {
     command: string,
     options?: SSHExecCommandOptions
   ): Promise<SSHExecCommandResponse> {
+    core.info(`Running ssh command:  ${command}`)
     return this.ssh.execCommand(command, options)
   }
 
