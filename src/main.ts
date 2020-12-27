@@ -6,6 +6,7 @@ async function run(): Promise<void> {
   try {
     const sshService = new SshService()
     const sha8 = core.getInput('sha8')
+    const image = core.getInput('image')
     let dockerComposeProd = fs.readFileSync(
       `${process.env.GITHUB_WORKSPACE}/docker-compose.prod`,
       `utf8`
@@ -22,16 +23,34 @@ async function run(): Promise<void> {
       `${process.env.GITHUB_WORKSPACE}/docker-compose.${sha8}.yml`,
       `/home/gha/docker-compose.${sha8}.yml`
     )
+
+    let response
+    core.info(`Pull Image`)
+    const region = core.getInput('region')
+    response = await sshService.execCommand(
+      `eval $(aws ecr get-login --no-include-email --region ${region})`
+    )
+    // @TODO check for error
+    core.info(JSON.stringify(response))
+
+    response = await sshService.execCommand(
+      `docker image pull ${image}:${sha8}`
+    )
+    // @TODO check for error
+    core.info(JSON.stringify(response))
+
     core.info(`Deploy stack`)
     const repo = convertReponameToDnsValid(
       // @ts-ignore
       `${process.env.GITHUB_REPOSITORY}`.split('/').pop()
     )
 
-    const response = await sshService.execCommand(
+    response = await sshService.execCommand(
       `docker stack deploy --compose-file /home/gha/docker-compose.${sha8}.yml ${repo}`
     )
+    // @TODO check for error
     core.info(JSON.stringify(response))
+
     await sshService.dispose()
     core.setOutput('time', new Date().toTimeString())
 
