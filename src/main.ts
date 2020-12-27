@@ -23,7 +23,11 @@ async function run(): Promise<void> {
       `/home/gha/docker-compose.${sha8}.yml`
     )
     core.info(`Deploy stack`)
-    const repo = `${process.env.GITHUB_REPOSITORY}`.split('/').pop()
+    const repo = convertReponameToDnsValid(
+      // @ts-ignore
+      `${process.env.GITHUB_REPOSITORY}`.split('/').pop()
+    )
+
     const response = await sshService.execCommand(
       `docker stack deploy --compose-file /home/gha/docker-compose.${sha8}.yml ${repo}`
     )
@@ -36,5 +40,7 @@ async function run(): Promise<void> {
     core.setFailed(error.message)
   }
 }
-
+function convertReponameToDnsValid(reponame: string) {
+  return reponame.replace('.', '-')
+}
 run()
