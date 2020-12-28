@@ -45,13 +45,16 @@ function run() {
             const sshService = new ssh_service_1.SshService();
             const sha8 = core.getInput('sha8');
             const image = core.getInput('image');
-            let dockerComposeProd = fs.readFileSync(`${process.env.GITHUB_WORKSPACE}/docker-compose.prod`, `utf8`);
-            dockerComposeProd = dockerComposeProd.replace(':DOCKER_TAG', sha8);
+            const env = core.getInput('env');
+            const dockerCompose = core.getInput('dockerCompose');
+            let dockerComposeFile = fs.readFileSync(`${process.env.GITHUB_WORKSPACE}/${dockerCompose}`, `utf8`);
+            dockerComposeFile = dockerComposeFile.replace(':DOCKER_TAG', sha8);
+            dockerComposeFile = dockerComposeFile.replace(':ENV', env);
             core.info(`Writing docker-compose.yml.`);
-            fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/docker-compose.${sha8}.yml`, dockerComposeProd);
+            fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/docker-compose.${sha8}-${env}.yml`, dockerComposeFile, 'utf8');
             yield sshService.connect();
             core.info(`Copy file to remote server`);
-            yield sshService.putFile(`${process.env.GITHUB_WORKSPACE}/docker-compose.${sha8}.yml`, `/home/gha/docker-compose.${sha8}.yml`);
+            yield sshService.putFile(`${process.env.GITHUB_WORKSPACE}/docker-compose.${sha8}-${env}.yml`, `/home/gha/docker-compose.${sha8}-${env}.yml`);
             let response;
             core.info(`Pull Image`);
             const region = core.getInput('region');
@@ -65,7 +68,7 @@ function run() {
             const repo = convertReponameToDnsValid(
             // @ts-ignore
             `${process.env.GITHUB_REPOSITORY}`.split('/').pop());
-            response = yield sshService.execCommand(`docker stack deploy --compose-file /home/gha/docker-compose.${sha8}.yml ${repo}`);
+            response = yield sshService.execCommand(`docker stack deploy --compose-file /home/gha/docker-compose.${sha8}-${env}.yml ${repo}-${env}`);
             // @TODO check for error
             core.info(JSON.stringify(response));
             yield sshService.dispose();

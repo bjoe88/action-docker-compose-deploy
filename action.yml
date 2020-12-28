@@ -14,6 +14,12 @@ inputs:
   sha8:
     required: true
     description: 'Sha8 for this commit'
+  env:
+    required: true
+    description: 'The env for this deployment'
+  region:
+    required: true
+    description: 'Region to deploy to'
 runs:
   using: 'node12'
   main: 'dist/index.js'
