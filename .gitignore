@@ -97,7 +97,6 @@ Thumbs.db
 # Ignore built ts files
 __tests__/runner/*
 lib/**/*
-/.idea/workspace.xml
-/.idea/action-docker-compose-deploy.iml
+/.idea/*
 /dist2/pagent.exe
 /dist/pagent.exe

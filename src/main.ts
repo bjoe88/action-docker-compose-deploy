@@ -7,21 +7,28 @@ async function run(): Promise<void> {
     const sshService = new SshService()
     const sha8 = core.getInput('sha8')
     const image = core.getInput('image')
-    let dockerComposeProd = fs.readFileSync(
-      `${process.env.GITHUB_WORKSPACE}/docker-compose.prod`,
+    const env = core.getInput('env')
+    const dockerCompose = core.getInput('dockerCompose')
+
+    let dockerComposeFile = fs.readFileSync(
+      `${process.env.GITHUB_WORKSPACE}/${dockerCompose}`,
       `utf8`
     )
-    dockerComposeProd = dockerComposeProd.replace(':DOCKER_TAG', sha8)
+
+    dockerComposeFile = dockerComposeFile.replace(':DOCKER_TAG', sha8)
+    dockerComposeFile = dockerComposeFile.replace(':ENV', env)
+
     core.info(`Writing docker-compose.yml.`)
     fs.writeFileSync(
-      `${process.env.GITHUB_WORKSPACE}/docker-compose.${sha8}.yml`,
-      dockerComposeProd
+      `${process.env.GITHUB_WORKSPACE}/docker-compose.${sha8}-${env}.yml`,
+      dockerComposeFile,
+      'utf8'
     )
     await sshService.connect()
     core.info(`Copy file to remote server`)
     await sshService.putFile(
-      `${process.env.GITHUB_WORKSPACE}/docker-compose.${sha8}.yml`,
-      `/home/gha/docker-compose.${sha8}.yml`
+      `${process.env.GITHUB_WORKSPACE}/docker-compose.${sha8}-${env}.yml`,
+      `/home/gha/docker-compose.${sha8}-${env}.yml`
     )
 
     let response
@@ -46,7 +53,7 @@ async function run(): Promise<void> {
     )
 
     response = await sshService.execCommand(
-      `docker stack deploy --compose-file /home/gha/docker-compose.${sha8}.yml ${repo}`
+      `docker stack deploy --compose-file /home/gha/docker-compose.${sha8}-${env}.yml ${repo}-${env}`
     )
     // @TODO check for error
     core.info(JSON.stringify(response))
