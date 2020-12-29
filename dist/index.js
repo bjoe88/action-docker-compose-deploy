@@ -41,6 +41,7 @@ const ssh_service_1 = __webpack_require__(3061);
 const fs = __importStar(__webpack_require__(5747));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
+        // noinspection TypeScriptValidateTypes
         try {
             const sshService = new ssh_service_1.SshService();
             const sha8 = core.getInput('sha8');
@@ -65,9 +66,8 @@ function run() {
             // @TODO check for error
             core.info(JSON.stringify(response));
             core.info(`Deploy stack`);
-            const repo = convertReponameToDnsValid(
             // @ts-ignore
-            `${process.env.GITHUB_REPOSITORY}`.split('/').pop());
+            const repo = convertReponameToDnsValid(`${process.env.GITHUB_REPOSITORY}`.split('/').pop());
             response = yield sshService.execCommand(`docker stack deploy --compose-file /home/gha/docker-compose.${sha8}-${env}.yml ${repo}-${env}`);
             // @TODO check for error
             core.info(JSON.stringify(response));

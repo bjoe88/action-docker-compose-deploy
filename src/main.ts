@@ -3,6 +3,7 @@ import {SshService} from './service/ssh.service'
 import * as fs from 'fs'
 
 async function run(): Promise<void> {
+  // noinspection TypeScriptValidateTypes
   try {
     const sshService = new SshService()
     const sha8 = core.getInput('sha8')
@@ -47,8 +48,8 @@ async function run(): Promise<void> {
     core.info(JSON.stringify(response))
 
     core.info(`Deploy stack`)
+    // @ts-ignore
     const repo = convertReponameToDnsValid(
-      // @ts-ignore
       `${process.env.GITHUB_REPOSITORY}`.split('/').pop()
     )
 
