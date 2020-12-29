@@ -15,8 +15,8 @@ async function run(): Promise<void> {
       `utf8`
     )
 
-    dockerComposeFile = dockerComposeFile.replace(':DOCKER_TAG', sha8)
-    dockerComposeFile = dockerComposeFile.replace(':ENV', env)
+    dockerComposeFile = dockerComposeFile.replace(/:DOCKER_TAG/g, sha8)
+    dockerComposeFile = dockerComposeFile.replace(/:ENV/g, env)
 
     core.info(`Writing docker-compose.yml.`)
     fs.writeFileSync(
@@ -67,6 +67,6 @@ async function run(): Promise<void> {
   }
 }
 function convertReponameToDnsValid(reponame: string) {
-  return reponame.replace('.', '-')
+  return reponame.replace(/./g, '-')
 }
 run()
