@@ -66,7 +66,6 @@ function run() {
             // @TODO check for error
             core.info(JSON.stringify(response));
             core.info(`Deploy stack`);
-            // @ts-ignore
             const repo = convertReponameToDnsValid(`${process.env.GITHUB_REPOSITORY}`.split('/').pop());
             response = yield sshService.execCommand(`docker stack deploy --compose-file /home/gha/docker-compose.${sha8}-${env}.yml ${repo}-${env}`);
             // @TODO check for error

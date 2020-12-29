@@ -48,9 +48,8 @@ async function run(): Promise<void> {
     core.info(JSON.stringify(response))
 
     core.info(`Deploy stack`)
-    // @ts-ignore
     const repo = convertReponameToDnsValid(
-      `${process.env.GITHUB_REPOSITORY}`.split('/').pop()
+      `${process.env.GITHUB_REPOSITORY}`.split('/').pop() as string
     )
 
     response = await sshService.execCommand(
