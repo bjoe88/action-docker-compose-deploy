@@ -53,7 +53,7 @@ async function run(): Promise<void> {
     )
 
     response = await sshService.execCommand(
-      `docker stack deploy --compose-file /home/gha/docker-compose.${sha8}-${env}.yml ${repo}-${env}`
+      `docker stack deploy --with-registry-auth --compose-file /home/gha/docker-compose.${sha8}-${env}.yml ${repo}-${env}`
     )
     // @TODO check for error
     core.info(JSON.stringify(response))
