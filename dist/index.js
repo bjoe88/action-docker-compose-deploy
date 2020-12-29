@@ -51,6 +51,7 @@ function run() {
             let dockerComposeFile = fs.readFileSync(`${process.env.GITHUB_WORKSPACE}/${dockerCompose}`, `utf8`);
             dockerComposeFile = dockerComposeFile.replace(/:DOCKER_TAG/g, sha8);
             dockerComposeFile = dockerComposeFile.replace(/:ENV/g, env);
+            dockerComposeFile = dockerComposeFile.replace(/:DOCKER_IMAGE/g, image);
             core.info(`Writing docker-compose.yml.`);
             fs.writeFileSync(`${process.env.GITHUB_WORKSPACE}/docker-compose.${sha8}-${env}.yml`, dockerComposeFile, 'utf8');
             yield sshService.connect();

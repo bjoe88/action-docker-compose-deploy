@@ -14,6 +14,12 @@ inputs:
   sha8:
     required: true
     description: 'Sha8 for this commit'
+  image:
+    required: true
+    description: 'The env for this deployment'
+  dockerCompose:
+    required: true
+    description: 'The env for this deployment'
   env:
     required: true
     description: 'The env for this deployment'

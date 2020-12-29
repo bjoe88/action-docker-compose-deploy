@@ -18,6 +18,7 @@ async function run(): Promise<void> {
 
     dockerComposeFile = dockerComposeFile.replace(/:DOCKER_TAG/g, sha8)
     dockerComposeFile = dockerComposeFile.replace(/:ENV/g, env)
+    dockerComposeFile = dockerComposeFile.replace(/:DOCKER_IMAGE/g, image)
 
     core.info(`Writing docker-compose.yml.`)
     fs.writeFileSync(
