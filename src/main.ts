@@ -67,6 +67,6 @@ async function run(): Promise<void> {
   }
 }
 function convertReponameToDnsValid(reponame: string) {
-  return reponame.replace(/./g, '-')
+  return reponame.replace(/\./g, '-')
 }
 run()

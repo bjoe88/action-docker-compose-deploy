@@ -80,7 +80,7 @@ function run() {
     });
 }
 function convertReponameToDnsValid(reponame) {
-    return reponame.replace(/./g, '-');
+    return reponame.replace(/\./g, '-');
 }
 run();
 
