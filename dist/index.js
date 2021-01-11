@@ -71,6 +71,9 @@ function run() {
             response = yield sshService.execCommand(`docker stack deploy --with-registry-auth --compose-file /home/gha/docker-compose.${sha8}-${env}.yml ${repo}-${env}`);
             // @TODO check for error
             core.info(JSON.stringify(response));
+            response = yield sshService.execCommand(`docker rm \`docker ps -a | grep "${image}" | grep "Exited " | awk '{print $1}'\``);
+            // @TODO check for error
+            core.info(JSON.stringify(response));
             response = yield sshService.execCommand(`docker rmi $(docker images -q ${image})`);
             // @TODO check for error
             core.info(JSON.stringify(response));

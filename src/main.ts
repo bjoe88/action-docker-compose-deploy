@@ -60,6 +60,12 @@ async function run(): Promise<void> {
     core.info(JSON.stringify(response))
 
     response = await sshService.execCommand(
+      `docker rm \`docker ps -a | grep "${image}" | grep "Exited " | awk '{print $1}'\``
+    )
+    // @TODO check for error
+    core.info(JSON.stringify(response))
+
+    response = await sshService.execCommand(
       `docker rmi $(docker images -q ${image})`
     )
     // @TODO check for error
