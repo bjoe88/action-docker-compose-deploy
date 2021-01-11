@@ -59,6 +59,12 @@ async function run(): Promise<void> {
     // @TODO check for error
     core.info(JSON.stringify(response))
 
+    response = await sshService.execCommand(
+      `docker rmi $(docker images -q ${image})`
+    )
+    // @TODO check for error
+    core.info(JSON.stringify(response))
+
     await sshService.dispose()
     core.setOutput('time', new Date().toTimeString())
 
@@ -67,7 +73,7 @@ async function run(): Promise<void> {
     core.setFailed(error.message)
   }
 }
-function convertReponameToDnsValid(reponame: string) {
+function convertReponameToDnsValid(reponame: string): string {
   return reponame.replace(/\./g, '-')
 }
 run()
