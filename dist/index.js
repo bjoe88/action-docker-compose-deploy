@@ -71,6 +71,9 @@ function run() {
             response = yield sshService.execCommand(`docker stack deploy --with-registry-auth --compose-file /home/gha/docker-compose.${sha8}-${env}.yml ${repo}-${env}`);
             // @TODO check for error
             core.info(JSON.stringify(response));
+            response = yield sshService.execCommand(`docker rmi $(docker images -q ${image})`);
+            // @TODO check for error
+            core.info(JSON.stringify(response));
             yield sshService.dispose();
             core.setOutput('time', new Date().toTimeString());
             return;
